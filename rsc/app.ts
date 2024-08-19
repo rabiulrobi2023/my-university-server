@@ -39,6 +39,16 @@ studentRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+//=====================Wrong API Error Handler===============
+app.all("*", (req:Request, res:Response)=>{
+  res.status(404).json({
+    success: false,
+    message: "Route Not Found"
+  });
+});
+
+
+
 //=====================Global Error Handler===============
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   if (error) {
