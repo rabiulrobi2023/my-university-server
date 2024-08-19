@@ -20,22 +20,27 @@ app.use("/api/v1/students", studentRouter);
 
 //=====================Operations===============
 userRouter.post("/create-user", (req: Request, res: Response) => {
-  const user = req.body;
-  console.log(user);
-  res.json({
-    success: true,
-    message: "User created sucessfull",
-    data: user,
-  });
+  try {
+    const user = req.body;
+    res.send("User created successfull");
+    console.log(user);
+  } catch {
+    res.json({
+      success: false,
+      message: "Something error happened",
+    });
+  }
 });
 
 studentRouter.get("/", (req: Request, res: Response) => {
-  const student = req.body;
-  console.log(student);
-  res.json({
-    success: true,
-    message: "Student fetched sucessfull",
-    data: student,
-  });
+  try {
+    const student = req.body;
+    res.send("Student fatched successfull");
+  } catch {
+    res.json({
+      success: true,
+      message: "Something error happened",
+    });
+  }
 });
 export default app;
