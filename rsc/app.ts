@@ -19,28 +19,34 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/students", studentRouter);
 
 //=====================Operations===============
-userRouter.post("/create-user", (req: Request, res: Response) => {
+userRouter.post("/create-user",(req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = req.body;
+      res.send("User created successfull");
+      console.log(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+studentRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = req.body;
-    res.send("User created successfull");
-    console.log(user);
-  } catch {
-    res.json({
+    const student = req.body;
+    res.send("Student fatched successfull");
+  } catch (error) {
+    next(error);
+  }
+});
+
+//=====================Global Error Handler===============
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  if (error) {
+    res.status(400).json({
       success: false,
-      message: "Something error happened",
+      message: "Something went wrong",
     });
   }
 });
 
-studentRouter.get("/", (req: Request, res: Response) => {
-  try {
-    const student = req.body;
-    res.send("Student fatched successfull");
-  } catch {
-    res.json({
-      success: true,
-      message: "Something error happened",
-    });
-  }
-});
 export default app;

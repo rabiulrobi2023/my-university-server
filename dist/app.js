@@ -19,28 +19,31 @@ const studentRouter = express_1.default.Router();
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/students", studentRouter);
 //=====================Operations===============
-userRouter.post("/create-user", (req, res) => {
+userRouter.post("/create-user", (req, res, next) => {
     try {
         const user = req.body;
         res.send("User created successfull");
         console.log(user);
     }
-    catch (_a) {
-        res.json({
-            success: false,
-            message: "Something error happened",
-        });
+    catch (error) {
+        next(error);
     }
 });
-studentRouter.get("/", (req, res) => {
+studentRouter.get("/", (req, res, next) => {
     try {
         const student = req.body;
         res.send("Student fatched successfull");
     }
-    catch (_a) {
-        res.json({
-            success: true,
-            message: "Something error happened",
+    catch (error) {
+        next(error);
+    }
+});
+//=====================Global Error Handler===============
+app.use((error, req, res, next) => {
+    if (error) {
+        res.status(400).json({
+            success: false,
+            message: "Something went wrong",
         });
     }
 });
