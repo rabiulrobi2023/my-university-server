@@ -1,9 +1,12 @@
-import express, { NextFunction, Request, Response } from "express";
-const app = express();
+import express, { Application, NextFunction, Request, Response } from "express";
+import cors from "cors"
+
+const app:Application = express();
 
 //=====================Parser===================
 app.use(express.json());
 app.use(express.text());
+app.use(cors())
 
 //=====================Middleware===============
 const middleware1 = (req: Request, res: Response, next: NextFunction) => {
