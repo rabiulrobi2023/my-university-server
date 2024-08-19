@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 const app = express();
-const port: number = 3000;
 
 //=====================Parser===================
 app.use(express.json());
@@ -12,14 +11,31 @@ const middleware1 = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+//=====================Routers==================
+const userRouter = express.Router();
+const studentRouter = express.Router();
+
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/students", studentRouter);
+
 //=====================Operations===============
-app.get("/", middleware1, (req: Request, res: Response) => {
-  res.send("Hello my university");
-  console.log("Data is founded");
+userRouter.post("/create-user", (req: Request, res: Response) => {
+  const user = req.body;
+  console.log(user);
+  res.json({
+    success: true,
+    message: "User created sucessfull",
+    data: user,
+  });
 });
 
-app.post("/", middleware1, (req, res) => {
-  res.send("Take your data");
-  console.log("Data added successfull");
+studentRouter.get("/", (req: Request, res: Response) => {
+  const student = req.body;
+  console.log(student);
+  res.json({
+    success: true,
+    message: "Student fetched sucessfull",
+    data: student,
+  });
 });
 export default app;

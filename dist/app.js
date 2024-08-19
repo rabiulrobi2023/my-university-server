@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
-const port = 3000;
 //=====================Parser===================
 app.use(express_1.default.json());
 app.use(express_1.default.text());
@@ -14,13 +13,28 @@ const middleware1 = (req, res, next) => {
     console.log("This is a middleware");
     next();
 };
+//=====================Routers==================
+const userRouter = express_1.default.Router();
+const studentRouter = express_1.default.Router();
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/students", studentRouter);
 //=====================Operations===============
-app.get("/", middleware1, (req, res) => {
-    res.send("Hello my university");
-    console.log("Data is founded");
+userRouter.post("/create-user", (req, res) => {
+    const user = req.body;
+    console.log(user);
+    res.json({
+        success: true,
+        message: "User created sucessfull",
+        data: user,
+    });
 });
-app.post("/", middleware1, (req, res) => {
-    res.send("Take your data");
-    console.log("Data added successfull");
+studentRouter.get("/", (req, res) => {
+    const student = req.body;
+    console.log(student);
+    res.json({
+        success: true,
+        message: "Student fetched sucessfull",
+        data: student,
+    });
 });
 exports.default = app;
