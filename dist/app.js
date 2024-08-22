@@ -10,11 +10,6 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.text());
 app.use((0, cors_1.default)());
-//=====================Middleware===============
-const middleware1 = (req, res, next) => {
-    console.log("This is a middleware");
-    next();
-};
 //=====================Routers==================
 const userRouter = express_1.default.Router();
 const studentRouter = express_1.default.Router();
@@ -33,7 +28,6 @@ userRouter.post("/create-user", (req, res, next) => {
 });
 studentRouter.get("/", (req, res, next) => {
     try {
-        const student = req.body;
         res.send("Student fatched successfull");
     }
     catch (error) {
@@ -44,7 +38,7 @@ studentRouter.get("/", (req, res, next) => {
 app.all("*", (req, res) => {
     res.status(404).json({
         success: false,
-        message: "Route Not Found"
+        message: "Route Not Found",
     });
 });
 //=====================Global Error Handler===============
