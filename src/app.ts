@@ -1,5 +1,6 @@
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
+import { StudentsRoutes } from './app/modules/student/students.route';
 
 const app: Application = express();
 
@@ -8,33 +9,9 @@ app.use(express.json());
 app.use(express.text());
 app.use(cors());
 
-//=====================Routers==================
-const userRouter = express.Router();
-const studentRouter = express.Router();
-
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/students', studentRouter);
-
-//=====================Operations===============
-userRouter.post(
-  '/create-user',
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const user = req.body;
-      res.send('User created successfull');
-      console.log(user);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
-
-studentRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.send('Student fatched successfull');
-  } catch (error) {
-    next(error);
-  }
+app.use('/api/v1/students/', StudentsRoutes);
+app.get('/', (req, res) => {
+  res.send('My-University server is running');
 });
 
 //=====================Wrong API Error Handler===============
@@ -46,7 +23,7 @@ app.all('*', (req: Request, res: Response) => {
 });
 
 //=====================Global Error Handler===============
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+app.use((error: string, req: Request, res: Response) => {
   if (error) {
     res.status(400).json({
       success: false,
