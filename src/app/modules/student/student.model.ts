@@ -28,11 +28,14 @@ export const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 const studentSchema = new Schema<TStudent>({
-  id: { type: String, required: true },
+  id: { type: String, required: true, unique: true },
   name: { type: userNameSchema, required: true },
   gender: {
     type: String,
-    enum: ['Male', 'Female', 'Others'],
+    enum: {
+      values: ['Male', 'Female', 'Others'],
+      message: '{VALUE} is not supported',
+    },
     required: true,
   },
   dateOfBirth: { type: Date, required: true },
@@ -46,13 +49,16 @@ const studentSchema = new Schema<TStudent>({
   emergencyContactNo: { type: String },
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
+  guardian: { type: guardianSchema, required: true },
+  localGuardian: {
+    type: localGuardianSchema,
+    required: [true, 'Local guardian is required'],
+  },
   profileImage: { type: String },
   status: {
     type: String,
     enum: ['active', 'inActive'],
-    required: true,
+    default: 'active',
   },
   isDeleted: { type: Boolean, required: true },
   createdAt: { type: Date, required: true },

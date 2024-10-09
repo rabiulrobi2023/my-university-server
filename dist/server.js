@@ -24,7 +24,7 @@ function main() {
             });
         }
         catch (error) {
-            console.log(error);
+            console.log('Server Error:', error);
         }
     });
 }

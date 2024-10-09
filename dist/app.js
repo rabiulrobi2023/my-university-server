@@ -12,6 +12,9 @@ app.use(express_1.default.json());
 app.use(express_1.default.text());
 app.use((0, cors_1.default)());
 app.use('/api/v1/students/', students_route_1.StudentsRoutes);
+app.get('/', (req, res) => {
+    res.send('My-University server is running');
+});
 //=====================Wrong API Error Handler===============
 app.all('*', (req, res) => {
     res.status(404).json({
@@ -20,7 +23,7 @@ app.all('*', (req, res) => {
     });
 });
 //=====================Global Error Handler===============
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
     if (error) {
         res.status(400).json({
             success: false,
