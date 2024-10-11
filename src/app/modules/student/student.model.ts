@@ -97,7 +97,7 @@ const studentSchema = new Schema<TStudent>({
     enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
     required: true,
   },
-  email: { type: String, required: [true, 'Email address is required'] , unique:[true]},
+  email: { type: String, required: [true, 'Email address is required'] , unique: true},
   contactNo: { type: String, required: [true, 'Contact no is required'] },
   emergencyContactNo: {
     type: String,

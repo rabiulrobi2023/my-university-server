@@ -8,7 +8,6 @@ const createUser = async (req: Request, res: Response) => {
     const studentData = req.body.student;
     // const zodParsedUserData = userValidation.userValidationSchema.parse(userPass,studentData)
     const result = await userService.createStudentIntoDB(userPass,studentData);
-    console.log(result)
     res.status(200).json({
       success: true,
       message: 'Student Createtion Successfull',
