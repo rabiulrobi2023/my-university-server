@@ -49,7 +49,6 @@ export const guardianSchema = new Schema<TGuardian>({
   },
 });
 
-
 //=========================Local Guardian  Schema=====================================
 export const localGuardianSchema = new Schema<TLocalGuardian>({
   loacalGuardianName: {
@@ -66,19 +65,23 @@ export const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-
-
 //=========================MainSchema=====================================
 const studentSchema = new Schema<TStudent>({
   id: {
     type: String,
-    trim: true,
-    maxlength: [6, 'ID should be maximum length 6'],
-    minlength: [6, 'ID should be minimum length 6'],
-    required: [true, 'ID is required'],
-
-    unique: true,
+    // trim: true,
+    // maxlength: [6, 'ID should be maximum length 6'],
+    // minlength: [6, 'ID should be minimum length 6'],
+    // required: [true, 'ID is required'],
+    // unique: true,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: [true, 'User is must be required'],
+    unique: true,
+    ref: 'User',
+  },
+
   name: { type: userNameSchema, required: true },
   gender: {
     type: String,
@@ -94,7 +97,7 @@ const studentSchema = new Schema<TStudent>({
     enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
     required: true,
   },
-  email: { type: String, required: [true, 'Email address is required'] },
+  email: { type: String, required: [true, 'Email address is required'] , unique:[true]},
   contactNo: { type: String, required: [true, 'Contact no is required'] },
   emergencyContactNo: {
     type: String,
@@ -114,14 +117,9 @@ const studentSchema = new Schema<TStudent>({
     required: true,
   },
   profileImage: { type: String },
-  status: {
-    type: String,
-    enum: ['active', 'inActive'],
-    default: 'active',
-  },
   isDeleted: { type: Boolean, default: false },
-  createdAt: { type: Date, required: true },
-  updatedAt: { type: Date, required: true },
-});
+},({
+  timestamps:true
+}));
 
 export const Student = model<TStudent>('student', studentSchema);

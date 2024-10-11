@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
+import { userRoutes } from './app/modules/user/user.route';
 import { StudentsRoutes } from './app/modules/student/students.route';
 
 const app: Application = express();
@@ -10,6 +11,7 @@ app.use(express.text());
 app.use(cors());
 
 app.use('/api/v1/students/', StudentsRoutes);
+app.use('/api/v1/user/', userRoutes);
 app.get('/', (req, res) => {
   res.send('My-University server is running');
 });
