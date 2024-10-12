@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const user_route_1 = require("./app/modules/user/user.route");
 const students_route_1 = require("./app/modules/student/students.route");
 const glogalErrorHandler_1 = __importDefault(require("./app/middlewares/glogalErrorHandler"));
+const notFoundRoute_1 = __importDefault(require("./app/middlewares/notFoundRoute"));
 const app = (0, express_1.default)();
 //=====================Parser===================
 app.use(express_1.default.json());
@@ -19,13 +20,8 @@ app.use('/api/v1/user/', user_route_1.userRoutes);
 app.get('/', (req, res) => {
     res.send('My-University server is running');
 });
-//=====================Wrong API Error Handler===============
-app.all('*', (req, res) => {
-    res.status(404).json({
-        success: false,
-        message: 'Route Not Found',
-    });
-});
 //=====================Global Error Handler===============
 app.use(glogalErrorHandler_1.default);
+//=====================Wrong API Error Handler===============
+app.use(notFoundRoute_1.default);
 exports.default = app;
