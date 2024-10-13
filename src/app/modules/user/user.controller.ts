@@ -3,8 +3,8 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 
 const createUser = catchAsync(async (req, res) => {
-  const userPass = req.body.password;
-  const studentData = req.body.student;
+  const userPass = req.body.body.password;
+  const studentData = req.body.body.student;
   const result = await userService.createStudentIntoDB(userPass, studentData);
   res.status(httpStatus.OK).json({
     success: true,
