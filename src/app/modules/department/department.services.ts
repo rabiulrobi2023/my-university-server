@@ -15,7 +15,7 @@ const getSingleDepartmentFromDB = async (payload: string) => {
 };
 
 const updateDepartmentIntoDB = async (id: string, payload: TDepartment) => {
-  return await Department.findByIdAndUpdate(id, payload);
+  return await Department.findOneAndUpdate({_id:id}, payload);
 };
 
 export const DepartmentServices = {
