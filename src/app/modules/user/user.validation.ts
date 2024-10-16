@@ -9,4 +9,4 @@ export const userValidationSchema = z.object({
     .max(20),
 });
 
-export const userValidation ={userValidationSchema} ;
+export const UserValidations = { userValidationSchema };

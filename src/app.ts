@@ -8,7 +8,6 @@ const app: Application = express();
 
 //=====================Parser===================
 app.use(express.json());
-app.use(express.text());
 app.use(cors());
 
 //=====================API===================
