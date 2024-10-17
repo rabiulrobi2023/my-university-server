@@ -13,6 +13,6 @@ router.post(
 
 router.get('/all-departments', DepartmenController.getAllDepartment);
 router.get('/:id', DepartmenController.getSingleDepartment);
-router.get('/update/:id',validationRequest(DepartmentValidations.updateDepartmentValidation), DepartmenController.uptdateDepartment);
+router.patch('/update/:id',validationRequest(DepartmentValidations.updateDepartmentValidation), DepartmenController.uptdateDepartment);
 
 export const DepartmentRoute = router

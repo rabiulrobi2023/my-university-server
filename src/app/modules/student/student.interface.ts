@@ -1,5 +1,4 @@
-import { Types } from "mongoose";
-
+import { Types } from 'mongoose';
 
 export type TUserName = {
   firstName: string;
@@ -24,7 +23,7 @@ export type TLocalGuardian = {
 
 export type TStudent = {
   id: string;
-  user: Types.ObjectId,
+  user: Types.ObjectId;
   name: TUserName;
   gender: 'Male' | 'Female' | 'Others';
   dateOfBirth: Date;
@@ -36,7 +35,8 @@ export type TStudent = {
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLocalGuardian;
-  admissionSemester:Types.ObjectId
   profileImage?: string;
   isDeleted: boolean;
+  academicDepartment: Types.ObjectId;
+  admissionSemester: Types.ObjectId;
 };

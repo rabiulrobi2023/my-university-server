@@ -12,7 +12,7 @@ const updateDepartmentValidation = z.object({
   name: z
     .string({ invalid_type_error: 'The department name must be string' })
     .optional(),
-  FacultyValidations: z.string().optional(),
+  faculty: z.string().optional(),
 });
 
 export const DepartmentValidations = {

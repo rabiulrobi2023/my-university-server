@@ -5,6 +5,9 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
+import { User } from '../user/user.model';
+import { Department } from '../department/department.model';
+import { AcademicSemester } from '../academicSemester/academicSemester.model';
 
 //=========================User/Student Name Schema=====================================
 export const userNameSchema = new Schema<TUserName>({
@@ -80,7 +83,7 @@ const studentSchema = new Schema<TStudent>(
       type: Schema.Types.ObjectId,
       required: [true, 'User is must be required'],
       unique: true,
-      ref: 'User',
+      ref: User,
     },
 
     name: { type: userNameSchema, required: true },
@@ -123,9 +126,13 @@ const studentSchema = new Schema<TStudent>(
     },
     profileImage: { type: String },
     isDeleted: { type: Boolean, default: false },
+    academicDepartment: {
+      type: Schema.ObjectId,
+      ref: Department,
+    },
     admissionSemester: {
       type: Schema.Types.ObjectId,
-      ref: 'AcademicSemester',
+      ref: AcademicSemester,
     },
   },
   {
