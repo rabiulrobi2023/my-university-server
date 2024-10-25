@@ -8,6 +8,8 @@ import {
 import { User } from '../user/user.model';
 import { Department } from '../department/department.model';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
+import AppError from '../../error/appError';
+import httpStatus from 'http-status';
 
 //=========================User/Student Name Schema=====================================
 export const userNameSchema = new Schema<TUserName>({
@@ -139,5 +141,17 @@ const studentSchema = new Schema<TStudent>(
     timestamps: true,
   },
 );
+
+studentSchema.pre('findOneAndUpdate', async function (next) {
+  const query = this.getQuery();
+  const isStudentExists = await Student.findOne(query);
+
+  if (!isStudentExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Student does not exists');
+  } else {
+    next();
+  }
+  // next();
+});
 
 export const Student = model<TStudent>('student', studentSchema);
