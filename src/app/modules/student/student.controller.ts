@@ -4,7 +4,8 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 
 const getAllStudents = catchAsync(async (req, res) => {
-  const result = await StudentServices.getAllStudentsFromDB();
+  const query = req.query;
+  const result = await StudentServices.getAllStudentsFromDB(query);
   res.status(200).json({
     success: result.length ? true : false,
     message: result.length
@@ -27,7 +28,6 @@ const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
 const updateSutdent = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const updateStudentData = req.body.student;
-
 
   const result = await StudentServices.updateStudentIntoDB(
     id,

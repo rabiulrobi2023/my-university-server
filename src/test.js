@@ -30,4 +30,10 @@ const objToArray = Object.values(err.errors).map(val=>{
         path: val.path
     }
 });
-console.log(objToArray);
+// console.log(objToArray);
+
+const x= ['Rahim','Karim','Salam']
+
+x.map(name=>{
+    console.log([name])
+})

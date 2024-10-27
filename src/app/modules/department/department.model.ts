@@ -26,15 +26,21 @@ departmentSchema.pre('findOneAndUpdate', async function (next) {
   const query = this.getQuery();
   const isExistDepartment = await Department.findOne(query);
   if (!isExistDepartment) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Department does not existsssssss');
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'Department does not exists',
+    );
   }
   next();
 });
 
 departmentSchema.pre('save', async function (next) {
-  const isExistsDepartment = await Department.findOne({ name: this.name });
+  const isExistsDepartment = await Department.findOne({ name: this.name});
   if (isExistsDepartment) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Department is already exists!!!!!!');
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'Department is already exists!!!!!!',
+    );
   }
   next();
 });

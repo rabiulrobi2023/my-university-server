@@ -6,21 +6,24 @@ import router from './app/routes';
 
 const app: Application = express();
 
-//=====================Parser===================
 app.use(express.json());
 app.use(cors());
 
-//=====================API===================
 app.use('/api/v1', router);
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   res.send('My-University server is running');
 });
 
-//=====================Global Error Handler===============
+// const test = (req: Request, res: Response) => {
+//   Promise.reject();
+
+//   res.send(a);
+// };
+// app.get('/test', test);
+
 app.use(globalErrorHandler);
 
-//=====================Wrong API Error Handler===============
 app.use(notFoundRoute);
 
 export default app;

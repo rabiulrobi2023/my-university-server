@@ -151,7 +151,6 @@ studentSchema.pre('findOneAndUpdate', async function (next) {
   } else {
     next();
   }
-  // next();
 });
 
 export const Student = model<TStudent>('student', studentSchema);
