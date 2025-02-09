@@ -9,5 +9,3 @@ export default {
   defaultPass:process.env.DEFAULT_PASS,
   bcryptSaltRound: process.env.BCRYPT_SALTROUND
 };
-
-

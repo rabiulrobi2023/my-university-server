@@ -1,36 +1,15 @@
 import { Schema, model } from 'mongoose';
-import {
-  TGuardian,
-  TLocalGuardian,
-  TStudent,
-  TUserName,
-} from './student.interface';
+import { TStudent } from './student.interface';
 import { User } from '../user/user.model';
 import { Department } from '../department/department.model';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import AppError from '../../error/appError';
 import httpStatus from 'http-status';
+import { bloodGroupSchema } from '../../schema/bloodGroupSchema';
+import { userNameSchema } from '../../schema/userNameSchema';
+import { TGuardian } from '../../interface/guardian';
+import { TLocalGuardian } from '../../interface/localGuardian';
 
-//=========================User/Student Name Schema=====================================
-export const userNameSchema = new Schema<TUserName>({
-  firstName: {
-    type: String,
-    trim: true,
-    maxlength: [10, 'First name should be within 10 character'],
-    required: [true, 'First name is required'],
-  },
-  middleName: {
-    type: String,
-    trim: true,
-    maxlength: [10, 'Mid name should be within 10 character'],
-    required: [true, 'Middle name is required'],
-  },
-  lastName: {
-    type: String,
-    maxlength: [10, 'Last name should be within 10 character'],
-    required: [true, 'Last name is required'],
-  },
-});
 
 //=========================Guardian Schema=====================================
 export const guardianSchema = new Schema<TGuardian>({
@@ -88,7 +67,7 @@ const studentSchema = new Schema<TStudent>(
       ref: User,
     },
 
-    name: { type: userNameSchema, required: true },
+    name: userNameSchema,
     gender: {
       type: String,
       enum: {
@@ -98,11 +77,7 @@ const studentSchema = new Schema<TStudent>(
       required: [true, 'Gender is required'],
     },
     dateOfBirth: { type: Date, required: [true, 'DOB is required'] },
-    bloodGroup: {
-      type: String,
-      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-      required: true,
-    },
+    bloodGroup: bloodGroupSchema,
     email: {
       type: String,
       required: [true, 'Email address is required'],

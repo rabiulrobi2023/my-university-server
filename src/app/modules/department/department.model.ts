@@ -1,8 +1,9 @@
 import { model, Schema } from 'mongoose';
 import { TDepartment } from './department.interface';
-import { Faculty } from '../faculty/faculty.molel';
+
 import httpStatus from 'http-status';
 import AppError from '../../error/appError';
+import { AcademicFaculty } from '../academicFaculty/academicFaculty.molel';
 
 const departmentSchema = new Schema<TDepartment>(
   {
@@ -11,10 +12,10 @@ const departmentSchema = new Schema<TDepartment>(
       required: [true, 'Department name is required'],
       unique: true,
     },
-    faculty: {
+    academicFaculty: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: Faculty,
+      ref: AcademicFaculty,
     },
   },
   {
@@ -26,16 +27,13 @@ departmentSchema.pre('findOneAndUpdate', async function (next) {
   const query = this.getQuery();
   const isExistDepartment = await Department.findOne(query);
   if (!isExistDepartment) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      'Department does not exists',
-    );
+    throw new AppError(httpStatus.NOT_FOUND, 'Department does not exists');
   }
   next();
 });
 
 departmentSchema.pre('save', async function (next) {
-  const isExistsDepartment = await Department.findOne({ name: this.name});
+  const isExistsDepartment = await Department.findOne({ name: this.name });
   if (isExistsDepartment) {
     throw new AppError(
       httpStatus.NOT_FOUND,

@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { StudentServices } from './student.services';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
@@ -15,7 +14,7 @@ const getAllStudents = catchAsync(async (req, res) => {
   });
 });
 
-const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
+const getSingleStudent = catchAsync(async (req, res) => {
   const studentId = req.params.id;
   const result = await StudentServices.getSingleStudentFromDB(studentId);
   res.status(200).json({
@@ -25,7 +24,7 @@ const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateSutdent = catchAsync(async (req: Request, res: Response) => {
+const updateSutdent = catchAsync(async (req, res) => {
   const id = req.params.id;
   const updateStudentData = req.body.student;
 
@@ -39,7 +38,7 @@ const updateSutdent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const deleteStudent = catchAsync(async (req: Request, res: Response) => {
+const deleteStudent = catchAsync(async (req, res) => {
   const id = req.params.id;
   const result = await StudentServices.deleteStudentIntoDB(id);
   sendResponse(res, {

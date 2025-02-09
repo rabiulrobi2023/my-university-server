@@ -7,11 +7,11 @@ const createDepartmentIntoDB = async (payload: TDepartment) => {
 };
 
 const getAllDepartmentsFromDB = async () => {
-  return await Department.find().populate('faculty');
+  return await Department.find().populate('academicFaculty');
 };
 
 const getSingleDepartmentFromDB = async (payload: string) => {
-  return await Department.findById(payload).populate('faculty');
+  return await Department.findById(payload).populate('academicFaculty');
 };
 
 const updateDepartmentIntoDB = async (id: string, payload: TDepartment) => {

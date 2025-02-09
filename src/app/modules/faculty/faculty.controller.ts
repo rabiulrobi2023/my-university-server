@@ -1,22 +1,12 @@
-import { FacultyServices } from './faculty.services';
-import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-
-const createFaculty = catchAsync(async (req, res) => {
-  const facultyData = req.body;
-  const result = await FacultyServices.createFacultyIntoDB(facultyData);
-  res.status(httpStatus.OK).json({
-    success: true,
-    message: 'Faculty created successfull',
-    data: result,
-  });
-});
+import { FacultyServices } from './faculty.services';
 
 const getAllFaculties = catchAsync(async (req, res) => {
-  const result = await FacultyServices.getAllFacultiesFromDB();
+  const query= req.query
+  const result = await FacultyServices.getAllFacultyFromDB(query);
   sendResponse(res, {
-    message: 'All faculties retrived successfull',
+    message: 'The faculties retrieved successfully ',
     data: result,
   });
 });
@@ -25,24 +15,34 @@ const getSingleFaculty = catchAsync(async (req, res) => {
   const id = req.params.id;
   const result = await FacultyServices.getSingleFacultyFromDB(id);
   sendResponse(res, {
-    message: 'Faculty retrived successfully',
+    message: 'The faculty retrieved successfully',
     data: result,
   });
 });
 
 const updateFaculty = catchAsync(async (req, res) => {
-  const id = req.params.id;
-  const updateData= req.body;
-  const result = await FacultyServices.updateFacultyIntoDB(id,updateData);
+  const id = req.params?.id;
+  const query = req.body;
+
+  const result = await FacultyServices.updateFacultyIntoDB(id, query);
   sendResponse(res, {
     message: 'Faculty updated successfull',
     data: result,
   });
 });
 
+const deleteSingleFaculty = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await FacultyServices.deleteSingleFacultyFromDB(id);
+  sendResponse(res, {
+    message: 'Faculty is deleted successfull',
+    data: result,
+  });
+});
+
 export const FacultyController = {
-  createFaculty,
   getAllFaculties,
   getSingleFaculty,
-  updateFaculty
+  updateFaculty,
+  deleteSingleFaculty,
 };

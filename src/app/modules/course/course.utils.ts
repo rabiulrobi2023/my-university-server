@@ -1,0 +1,1 @@
+export const coruseSearchableField = ['title','prefix','credit' ]

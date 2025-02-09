@@ -12,7 +12,7 @@ app.use(cors());
 app.use('/api/v1', router);
 
 app.get('/', async (req, res) => {
-  res.send('My-University server is running');
+  res.send('My-University server is ru...');
 });
 
 // const test = (req: Request, res: Response) => {

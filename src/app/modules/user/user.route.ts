@@ -10,4 +10,10 @@ router.post(
   validationRequest(createStudentValidationSchema),
   userController.createUser,
 );
+
+router.post(
+  '/create-faculty',
+  // validationRequest(FacultyValidations.createFacultyValidationSchema),
+  userController.createFaculty,
+);
 export const UserRoutes = router;

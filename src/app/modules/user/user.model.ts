@@ -25,7 +25,8 @@ const userSchema = new Schema<TUser>(
     },
     staus: {
       type: String,
-      enum: ['in-progress', 'block'],
+      enum: ['inProgress', 'block'],
+      default:'inProgress'
     },
     isDeleted: {
       type: Boolean,

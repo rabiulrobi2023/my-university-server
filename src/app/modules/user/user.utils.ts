@@ -44,3 +44,5 @@ export const studentIdGenerator = async (payload: TAcademicSemester) => {
 
   return currentStudentId;
 };
+
+

@@ -2,6 +2,7 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { DepartmentServices } from './department.services';
 
+
 const createDepartment = catchAsync(async (req, res) => {
   const data = req.body;
   const result = await DepartmentServices.createDepartmentIntoDB(data);

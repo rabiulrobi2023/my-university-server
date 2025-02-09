@@ -1,33 +1,17 @@
 import { Types } from 'mongoose';
-
-export type TUserName = {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-};
-
-export type TGuardian = {
-  fathersName: string;
-  fathersOccupation: string;
-  fathersContactNo: string;
-  mothersName: string;
-  mothersOccupation: string;
-  mothersContactNo: string;
-};
-
-export type TLocalGuardian = {
-  loacalGuardianName: string;
-  localGuardianAddress: string;
-  localGuardianContactNo: string;
-};
+import { TUserName } from '../../interface/userName';
+import { TGuardian } from '../../interface/guardian';
+import { TLocalGuardian } from '../../interface/localGuardian';
+import { TBloodGroup } from '../../interface/bloodGroup.interface';
+import { TGender } from '../../interface/gender';
 
 export type TStudent = {
   id: string;
   user: Types.ObjectId;
   name: TUserName;
-  gender: 'Male' | 'Female' | 'Others';
+  gender: TGender;
   dateOfBirth: Date;
-  bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  bloodGroup: TBloodGroup;
   email: string;
   contactNo: string;
   emergencyContactNo: string;

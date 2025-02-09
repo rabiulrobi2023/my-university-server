@@ -10,5 +10,5 @@ export type TUser = {
 // export type TNewUser = {
 //   id: string;
 //   password: string;
-//   role: 'admin' | 'faculty' | 'student';
+//   role: 'admin' | 'academicFaculty' | 'student';
 // };
