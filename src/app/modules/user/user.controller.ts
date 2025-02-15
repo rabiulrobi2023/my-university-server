@@ -1,15 +1,26 @@
+
 import { UserServices } from './user.services';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 
-const createUser = catchAsync(async (req, res) => {
+const createStudent = catchAsync(async (req, res) => {
   const userPass = req.body.password;
   const studentData = req.body.student;
   const result = await UserServices.createStudentIntoDB(userPass, studentData);
   res.status(httpStatus.OK).json({
     success: true,
     message: 'Student Createtion Successfull',
+    data: result,
+  });
+});
+
+const createAdmin = catchAsync(async (req, res) => {
+  const userPass = req.body.password;
+  const adminData = req.body.admin;
+  const result = await UserServices.createAdminIntoDB(userPass, adminData);
+  sendResponse(res, {
+    message: 'Admin created successfull',
     data: result,
   });
 });
@@ -24,8 +35,17 @@ const createFaculty = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllUsersFromDB();
+  sendResponse(res, {
+    message: 'Users retrived successfull',
+    data: result,
+  });
+});
 
 export const userController = {
-  createUser,createFaculty
+  createStudent,
+  createFaculty,
+  createAdmin,
+  getAllUsers,
 };
-

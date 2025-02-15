@@ -10,4 +10,6 @@ router.post(
   OfferedCourseController.createOfferedCourse,
 );
 
+router.patch('/update/:id',validationRequest(OfferedCourseValidations.updateOfferedCourseValidation),OfferedCourseController.updateOfferedCourse)
+
 export const OfferedCourseRouter = router;

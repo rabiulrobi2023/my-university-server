@@ -45,4 +45,30 @@ export const studentIdGenerator = async (payload: TAcademicSemester) => {
   return currentStudentId;
 };
 
+const findLastAdmin = async () => {
+  const lastAdmin = await User.findOne(
+    {
+      role: 'admin',
+    },
+    {
+      id: 1,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+  return lastAdmin ? lastAdmin.id : undefined;
+};
 
+export const adminIdGenerator = async () => {
+  let adminId = 'A-0001';
+  const lastAdminId = await findLastAdmin();
+
+  if (lastAdminId) {
+    const existAdminIdDigit = Number(lastAdminId.substring(2, 6));
+    const newAdminDigit = (existAdminIdDigit + 1).toString().padStart(4, '0');
+    adminId = `A-${newAdminDigit}`;
+  }
+  return adminId;
+};

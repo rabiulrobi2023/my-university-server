@@ -51,7 +51,7 @@ const offeredCourseSchema = new Schema<TOfferedCourse>(
       trim: true,
     },
     days: {
-      type: String,
+      type: [String],
       enum: days,
       required: true,
       trim: true,

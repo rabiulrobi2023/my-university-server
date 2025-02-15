@@ -5,7 +5,6 @@ import { Department } from '../department/department.model';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import AppError from '../../error/appError';
 import httpStatus from 'http-status';
-import { bloodGroupSchema } from '../../schema/bloodGroupSchema';
 import { userNameSchema } from '../../schema/userNameSchema';
 import { TGuardian } from '../../interface/guardian';
 import { TLocalGuardian } from '../../interface/localGuardian';
@@ -54,11 +53,6 @@ const studentSchema = new Schema<TStudent>(
   {
     id: {
       type: String,
-      // trim: true,
-      // maxlength: [6, 'ID should be maximum length 6'],
-      // minlength: [6, 'ID should be minimum length 6'],
-      // required: [true, 'ID is required'],
-      // unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -77,7 +71,11 @@ const studentSchema = new Schema<TStudent>(
       required: [true, 'Gender is required'],
     },
     dateOfBirth: { type: Date, required: [true, 'DOB is required'] },
-    bloodGroup: bloodGroupSchema,
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      requird: [true, 'Blood group is required'],
+    },
     email: {
       type: String,
       required: [true, 'Email address is required'],

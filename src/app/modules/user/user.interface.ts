@@ -1,14 +1,20 @@
-export type TUser = {
+/* eslint-disable no-unused-vars */
+
+import { Model } from 'mongoose';
+import { userRole } from './user.constant';
+
+export interface IUser {
   id: string;
   password: string;
   needPasswordChange: boolean;
   role: 'admin' | 'faculty' | 'student';
   staus: 'inProgress' | 'block';
   isDeleted: boolean;
-};
+}
 
-// export type TNewUser = {
-//   id: string;
-//   password: string;
-//   role: 'admin' | 'academicFaculty' | 'student';
-// };
+export interface UserModel extends Model<IUser> {
+  isUserExistByCustomId(id: string): Promise<IUser>;
+  isPassowrdMatched(id: string, plainPassword: string): Promise<boolean>;
+}
+
+export type TUserRole = keyof typeof userRole;

@@ -1,13 +1,8 @@
 import { z } from 'zod';
+import { userNameValidation } from '../../validations/userName.validation';
 //===========================Create Validation Schema===============
 
-export const createStudentNameValidationSchema = z.object({
-  firstName: z
-    .string()
-    .max(10, { message: 'Name must be maximum 10 character log' }),
-  middleName: z.string(),
-  lastName: z.string(),
-});
+
 
 export const createGuardianValidationSchema = z.object({
   fathersName: z.string(),
@@ -27,7 +22,7 @@ export const createLocalGuardianValidationSchema = z.object({
 export const createStudentValidationSchema = z.object({
   password: z.string().max(20, 'Password minimum 6 digit long').optional(),
   student: z.object({
-    name: createStudentNameValidationSchema,
+    name: userNameValidation,
     gender: z.enum(['Male', 'Female', 'Others']),
     dateOfBirth: z.string().transform((val) => new Date(val)),
     bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),

@@ -3,7 +3,8 @@ import sendResponse from '../../utils/sendResponse';
 import { FacultyServices } from './faculty.services';
 
 const getAllFaculties = catchAsync(async (req, res) => {
-  const query= req.query
+  console.log(req.user)
+  const query = req.query;
   const result = await FacultyServices.getAllFacultyFromDB(query);
   sendResponse(res, {
     message: 'The faculties retrieved successfully ',
