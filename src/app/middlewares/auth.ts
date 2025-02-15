@@ -5,6 +5,7 @@ import AppError from '../error/appError';
 import httpStatus from 'http-status';
 import config from '../config';
 import { TUserRole } from '../modules/user/user.interface';
+import { User } from '../modules/user/user.model';
 
 const auth = (...requiredUserRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -16,21 +17,43 @@ const auth = (...requiredUserRoles: TUserRole[]) => {
       );
     }
 
-    jwt.verify(
-      authorizationToken,
-      config.jwtAcceessToken as string,
-      function (err, decoded) {
-        if (err) {
-          throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized user');
-        }
-        const role = (decoded as JwtPayload).role;
-        if (requiredUserRoles && !requiredUserRoles.includes(role)) {
-          throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
-        }
-        req.user = decoded as JwtPayload;
-        next();
-      },
-    );
+    const securedToken = config.jwtAcceessToken as string;
+
+    const decoded = jwt.verify(authorizationToken, securedToken) as JwtPayload;
+    if (!decoded) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Invalid token');
+    }
+
+    const { id, role, iat} = decoded;
+
+    const isUserExist = await User.isUserExistByCustomId(id);
+
+    const { staus, isDeleted, passwordChangeAt } = isUserExist;
+
+    if (requiredUserRoles && !requiredUserRoles.includes(role)) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
+    }
+
+    if (!isUserExist) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'The person is not a user');
+    }
+
+    if (staus === 'block') {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'The user is block');
+    }
+    if (isDeleted) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'The user is deleted');
+    }
+
+    if (
+      passwordChangeAt &&
+      (await User.isJwtIssueBeforePasswordChange(passwordChangeAt, iat))
+    ) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'Password already changed');
+    }
+
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
 export default auth;
