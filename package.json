@@ -19,7 +19,6 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status": "^1.7.4",
-    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.3",
     "zod": "^3.23.8"
   },
@@ -34,6 +33,7 @@
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.9.0",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "^3.1.9",
     "prettier": "3.3.3",
     "ts-node": "^10.9.2",

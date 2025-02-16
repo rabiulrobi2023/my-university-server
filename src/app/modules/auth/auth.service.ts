@@ -2,10 +2,10 @@ import httpStatus from 'http-status';
 import AppError from '../../error/appError';
 import { User } from '../user/user.model';
 import { TChangePassowrd, TLoginUser } from './auth.interface';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import bcryt from 'bcrypt';
-import { now } from 'mongoose';
+import { createToken } from './auth.utils';
 
 const loginUser = async (payload: TLoginUser) => {
   // const isUserExist = await User.findOne({ id: payload?.id });
@@ -51,12 +51,22 @@ const loginUser = async (payload: TLoginUser) => {
     role: isExistUser.role,
   };
 
-  const accessToken = jwt.sign(jwtPayload, config.jwtAcceessToken as string, {
-    expiresIn: '5d',
-  });
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwtRefreshSecret as string,
+    config.jwtRefreshExpireIn as string,
+  );
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwtRefreshSecret as string,
+    config.jwtRefreshExpireIn as string,
+  );
+  
 
   return {
     accessToken,
+    refreshToken,
     needPasswordChange: isExistUser?.needPasswordChange,
   };
 };
