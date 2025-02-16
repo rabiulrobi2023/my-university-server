@@ -23,6 +23,16 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
+const refreshToken = catchAsync(async(req,res)=>{
+  const {refreshToken} = req.cookies
+  const result = await(AuthServices.refreshToken(refreshToken))
+  sendResponse(res,{
+    message:"Access token retrive sussessfull",
+    data: result
+  })
+  
+})
+
 const changePassword = catchAsync(async (req, res) => {
   const user = req.user;
   const passwords = req.body;
@@ -36,4 +46,5 @@ const changePassword = catchAsync(async (req, res) => {
 export const AuthController = {
   loginUser,
   changePassword,
+  refreshToken
 };

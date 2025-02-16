@@ -13,9 +13,16 @@ router.post(
 );
 
 router.post(
-  '/change-password',auth(userRole.admin,userRole.faculty,userRole.student),
+  '/change-password',
+  auth(userRole.admin, userRole.faculty, userRole.student),
   validationRequest(AuthValidation.changePasswordValidation),
   AuthController.changePassword,
+);
+
+router.post(
+  '/refresh-token',
+  validationRequest(AuthValidation.refreshTokenValidation),
+  AuthController.refreshToken,
 );
 
 export const AuthRouter = router;

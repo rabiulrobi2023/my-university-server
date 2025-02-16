@@ -9,7 +9,7 @@ import { TUserRole } from '../user/user.interface';
 const router = Router();
 
 router.get(
-  '/all',
+  '/all-faculties',
   auth(userRole.admin as TUserRole),
   FacultyController.getAllFaculties,
 );
