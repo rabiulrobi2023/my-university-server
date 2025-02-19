@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 
 import { Model } from 'mongoose';
-import { userRole } from './user.constant';
+import { userRoles } from './user.constant';
 
 export interface IUser {
   id: string;
+  email: string;
   password: string;
   passwordChangeAt?: Date;
   needPasswordChange: boolean;
@@ -22,4 +23,4 @@ export interface UserModel extends Model<IUser> {
   ): Promise<boolean>;
 }
 
-export type TUserRole = keyof typeof userRole;
+export type TUserRole = keyof typeof userRoles;

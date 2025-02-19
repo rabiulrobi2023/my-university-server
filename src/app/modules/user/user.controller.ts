@@ -1,13 +1,13 @@
-
 import { UserServices } from './user.services';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 
 const createStudent = catchAsync(async (req, res) => {
+  const file = req.file;
   const userPass = req.body.password;
   const studentData = req.body.student;
-  const result = await UserServices.createStudentIntoDB(userPass, studentData);
+  const result = await UserServices.createStudentIntoDB(userPass, studentData, file);
   res.status(httpStatus.OK).json({
     success: true,
     message: 'Student Createtion Successfull',
@@ -43,9 +43,31 @@ const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const token = req.user;
+  const { id, role } = token;
+  const result = await UserServices.getMeFromDB(id, role);
+  sendResponse(res, {
+    message: 'Self data retrived successfull',
+    data: result,
+  });
+});
+
+const userStatusChange = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const status = req.body.status;
+  const result = await UserServices.userStatusChangeIntoDB(id, status);
+  sendResponse(res, {
+    message: 'User status change successfull',
+    data: result,
+  });
+});
+
 export const userController = {
   createStudent,
   createFaculty,
   createAdmin,
   getAllUsers,
+  getMe,
+  userStatusChange,
 };

@@ -14,8 +14,18 @@ const changePasswordValidation = z.object({
   newPassword: z.string({ required_error: 'New password is required' }),
 });
 
+const forgotPassowrdValidation = z.object({
+  userId: z.string({ message: 'Id is required' }),
+});
+const resetPasswordValidation = z.object({
+  id: z.string({ message: 'Id is required' }),
+  newPassword: z.string({ message: 'New password is required' }),
+});
+
 export const AuthValidation = {
   loginUserValidation,
   refreshTokenValidation,
   changePasswordValidation,
+  forgotPassowrdValidation,
+  resetPasswordValidation
 };

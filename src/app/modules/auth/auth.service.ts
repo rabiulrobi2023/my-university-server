@@ -5,8 +5,8 @@ import { TChangePassowrd, TLoginUser } from './auth.interface';
 import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import bcryt from 'bcrypt';
-import { createToken } from './auth.utils';
-import jwt from 'jsonwebtoken';
+import { createToken, verifyToken } from './auth.utils';
+import { sendMail } from '../../utils/sentMail';
 
 const loginUser = async (payload: TLoginUser) => {
   // const isUserExist = await User.findOne({ id: payload?.id });
@@ -110,9 +110,10 @@ const refreshToken = async (authorizationToken: string) => {
     throw new AppError(httpStatus.UNAUTHORIZED, 'Your are unauthorized person');
   }
 
-  const securedToken = config.jwtRefreshSecret as string;
-
-  const decoded = jwt.verify(authorizationToken, securedToken) as JwtPayload;
+  const decoded = verifyToken(
+    authorizationToken,
+    config.jwtRefreshSecret as string,
+  );
   if (!decoded) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid token');
   }
@@ -157,8 +158,76 @@ const refreshToken = async (authorizationToken: string) => {
   };
 };
 
+const forgotPassword = async (userId: string) => {
+  const user = await User.isUserExistByCustomId(userId);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'The user not found');
+  }
+
+  if (user.staus === 'block') {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'The user is block');
+  }
+  if (user.isDeleted) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'The user is deleted');
+  }
+
+  const jwtPayload = {
+    id: user.id,
+    role: user.role,
+  };
+
+  const resetToken = createToken(
+    jwtPayload,
+    config.jwtAcceessSecret as string,
+    '5m',
+  );
+
+  const resetLink = `${config.ui_url}?id=${user.id}&token=${resetToken}`;
+  sendMail(user.email, resetLink);
+};
+
+const resetPassword = async (
+  id: string,
+  newPassword: string,
+  token: string,
+) => {
+  const user = await User.isUserExistByCustomId(id);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'The user not found');
+  }
+
+  if (user.staus === 'block') {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'The user is block');
+  }
+  if (user.isDeleted) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'The user is deleted');
+  }
+
+  const decoded = verifyToken(token, config.jwtAcceessSecret as string);
+
+  if (id !== decoded.id) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User id not matched');
+  }
+
+  const newHasPassowrd = await bcryt.hash(
+    newPassword,
+    Number(config.bcryptSaltRound),
+  );
+
+  await User.findOneAndUpdate(
+    { id, role: decoded.role },
+    { password: newHasPassowrd, passwordChangeAt: new Date() },
+  );
+
+  return {};
+};
+
 export const AuthServices = {
   loginUser,
   changePassword,
   refreshToken,
+  forgotPassword,
+  resetPassword,
 };

@@ -15,8 +15,14 @@ import { facultyIdGenerator } from '../faculty/faculty.utils';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
 import { IUser } from './user.interface';
+import { userRoles } from './user.constant';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentIntoDB = async (pass: string, studentData: TStudent) => {
+const createStudentIntoDB = async (
+  pass: string,
+  studentData: TStudent,
+  file: any,
+) => {
   const admissionSemesterData = await AcademicSemester.findById(
     studentData.admissionSemester,
   );
@@ -31,6 +37,7 @@ const createStudentIntoDB = async (pass: string, studentData: TStudent) => {
 
     const userData: Partial<IUser> = {
       id: studentId,
+      email: studentData.email,
       password: pass || (config.defaultPass as string),
       role: 'student',
     };
@@ -42,6 +49,15 @@ const createStudentIntoDB = async (pass: string, studentData: TStudent) => {
     }
     studentData.id = newUser[0].id;
     studentData.user = newUser[0]._id;
+
+    const imageName = `Photo_${newUser[0].id}_${studentData?.name.middleName}`;
+
+    const generatProfileImage = await sendImageToCloudinary(
+      file?.path,
+      imageName,
+    );
+
+    studentData.profileImage = generatProfileImage.secure_url;
 
     const newStudent = await Student.create([studentData], { session });
     if (!newStudent.length) {
@@ -66,6 +82,7 @@ const createAdminIntoDB = async (pass: string, adminData: TAdmin) => {
 
     const userData: Partial<IUser> = {
       id: admintId,
+      email: adminData.email,
       password: pass || (config.defaultPass as string),
       role: 'admin',
     };
@@ -99,6 +116,7 @@ const createFacultyIntoDB = async (pass: string, facultyData: TFaculty) => {
     const facultyId = await facultyIdGenerator();
     const userData: Partial<IUser> = {
       id: facultyId,
+      email: facultyData.email,
       password: pass || config.defaultPass,
       role: 'faculty',
     };
@@ -129,9 +147,36 @@ const getAllUsersFromDB = async () => {
   return result;
 };
 
+const getMeFromDB = async (userId: string, role: string) => {
+  let result = null;
+  if (role === userRoles.admin) {
+    result = await Admin.findOne({ userId }).populate('user');
+  }
+
+  if (role === userRoles.faculty) {
+    result = await Faculty.findOne({ userId }).populate('user');
+  }
+
+  if (role === userRoles.student) {
+    result = await Student.findOne({ userId }).populate('user');
+  }
+  return result;
+};
+
+const userStatusChangeIntoDB = async (id: string, payload: string) => {
+  const result = await User.findByIdAndUpdate(
+    id,
+    { staus: payload },
+    { new: true },
+  );
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   getAllUsersFromDB,
   createAdminIntoDB,
+  getMeFromDB,
+  userStatusChangeIntoDB,
 };

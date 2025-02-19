@@ -16,4 +16,5 @@ exports.default = {
     jwtAccessExpireIn: process.env.JWT_ACCESS_EXPIREIN,
     jwtRefreshSecret: process.env.JWT_REFRESS_SECRET,
     jwtRefreshExpireIn: process.env.JWT_REFRESS_EXPIREIN,
+    ui_url: process.env.UI_URL,
 };

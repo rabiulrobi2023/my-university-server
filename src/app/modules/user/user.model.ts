@@ -10,6 +10,11 @@ const userSchema = new Schema<IUser, UserModel>(
       required: true,
       unique: true,
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     password: {
       type: String,
       required: true,
@@ -69,9 +74,11 @@ userSchema.statics.isJwtIssueBeforePasswordChange = async function (
   passwordChangeAt,
   JwtIssueAt,
 ) {
-  const passwordChangeAtInSecond = Math.floor((new Date(passwordChangeAt).getTime() / 1000));
+  const passwordChangeAtInSecond = Math.floor(
+    new Date(passwordChangeAt).getTime() / 1000,
+  );
 
-  return passwordChangeAtInSecond>JwtIssueAt
+  return passwordChangeAtInSecond > JwtIssueAt;
 };
 
 export const User = model<IUser, UserModel>('user', userSchema);
