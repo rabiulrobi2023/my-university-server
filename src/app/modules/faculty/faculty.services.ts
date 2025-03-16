@@ -25,7 +25,11 @@ const getAllFacultyFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .limit();
   const result = await facultyQuery.queryModel;
-  return result;
+  const meta = await facultyQuery.totalCount();
+  return {
+    meta,
+    result,
+  };
 };
 
 const getSingleFacultyFromDB = async (id: string) => {

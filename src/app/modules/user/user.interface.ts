@@ -9,7 +9,7 @@ export interface IUser {
   password: string;
   passwordChangeAt?: Date;
   needPasswordChange: boolean;
-  role: 'admin' | 'faculty' | 'student';
+  role: 'super-admin' | 'admin' | 'faculty' | 'student';
   staus: 'inProgress' | 'block';
   isDeleted: boolean;
 }

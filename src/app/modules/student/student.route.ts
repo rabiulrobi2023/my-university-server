@@ -7,16 +7,25 @@ import { userRoles } from '../user/user.constant';
 
 const router = express.Router();
 
-router.get('/all', StudentController.getAllStudents);
+router.get(
+  '/all',
+  auth(userRoles.superAdmin, userRoles.admin),
+  StudentController.getAllStudents,
+);
 router.get(
   '/:id',
-  auth(userRoles.admin),
+  auth(userRoles.superAdmin, userRoles.admin),
   StudentController.getSingleStudent,
 );
 router.patch(
   '/update/:id',
+  auth(userRoles.superAdmin, userRoles.admin),
   validationRequest(updateStudentValidationSchema),
   StudentController.updateSutdent,
 );
-router.patch('/delete/:id', StudentController.deleteStudent);
+router.patch(
+  '/delete/:id',
+  auth(userRoles.superAdmin, userRoles.admin),
+  StudentController.deleteStudent,
+);
 export const StudentsRoutes = router;

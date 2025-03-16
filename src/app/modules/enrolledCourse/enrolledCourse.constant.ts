@@ -1,0 +1,1 @@
+export const letterGrade = ["A+","A","B","C","D","F","NA"]

@@ -1,14 +1,11 @@
 import { Schema, model } from 'mongoose';
 import { TStudent } from './student.interface';
 import { User } from '../user/user.model';
-import { Department } from '../department/department.model';
-import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import AppError from '../../error/appError';
 import httpStatus from 'http-status';
 import { userNameSchema } from '../../schema/userNameSchema';
 import { TGuardian } from '../../interface/guardian';
 import { TLocalGuardian } from '../../interface/localGuardian';
-
 
 //=========================Guardian Schema=====================================
 export const guardianSchema = new Schema<TGuardian>({
@@ -99,15 +96,19 @@ const studentSchema = new Schema<TStudent>(
       type: localGuardianSchema,
       required: true,
     },
-    profileImage: { type: String },
+    profileImage: { type: String, default: '' },
     isDeleted: { type: Boolean, default: false },
+    academicFaculty: {
+      type: Schema.ObjectId,
+      ref: 'academic-faculties',
+    },
     academicDepartment: {
       type: Schema.ObjectId,
-      ref: Department,
+      ref: 'departments',
     },
     admissionSemester: {
       type: Schema.Types.ObjectId,
-      ref: AcademicSemester,
+      ref: 'academic-semesters',
     },
   },
   {

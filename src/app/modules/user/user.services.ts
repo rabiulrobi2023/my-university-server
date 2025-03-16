@@ -17,6 +17,7 @@ import { Admin } from '../admin/admin.model';
 import { IUser } from './user.interface';
 import { userRoles } from './user.constant';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
+import { Department } from '../department/department.model';
 
 const createStudentIntoDB = async (
   pass: string,
@@ -26,6 +27,18 @@ const createStudentIntoDB = async (
   const admissionSemesterData = await AcademicSemester.findById(
     studentData.admissionSemester,
   );
+  if (!admissionSemesterData) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Admission semester not found');
+  }
+
+  const isDepartmentExist = await Department.findById(
+    studentData.academicDepartment,
+  );
+  if (!isDepartmentExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Department not found');
+  }
+
+  studentData.academicFaculty = isDepartmentExist.academicFaculty;
 
   const session = await mongoose.startSession();
 
@@ -50,14 +63,14 @@ const createStudentIntoDB = async (
     studentData.id = newUser[0].id;
     studentData.user = newUser[0]._id;
 
-    const imageName = `Photo_${newUser[0].id}_${studentData?.name.middleName}`;
-
-    const generatProfileImage = await sendImageToCloudinary(
-      file?.path,
-      imageName,
-    );
-
-    studentData.profileImage = generatProfileImage.secure_url;
+    if (file) {
+      const imageName = `Photo_${newUser[0].id}_${studentData?.name.middleName}`;
+      const generatProfileImageUrl = (await sendImageToCloudinary(
+        file?.path,
+        imageName,
+      )) as any;
+      studentData.profileImage = generatProfileImageUrl.secure_url;
+    }
 
     const newStudent = await Student.create([studentData], { session });
     if (!newStudent.length) {
@@ -73,7 +86,11 @@ const createStudentIntoDB = async (
   }
 };
 
-const createAdminIntoDB = async (pass: string, adminData: TAdmin) => {
+const createAdminIntoDB = async (
+  pass: string,
+  adminData: TAdmin,
+  file: any,
+) => {
   const session = await mongoose.startSession();
 
   try {
@@ -95,6 +112,15 @@ const createAdminIntoDB = async (pass: string, adminData: TAdmin) => {
     adminData.id = newUser[0].id;
     adminData.user = newUser[0]._id;
 
+    if (file) {
+      const imageName = `Photo_${newUser[0].id}_${adminData?.name.middleName}`;
+      const generatProfileImageUrl = (await sendImageToCloudinary(
+        file?.path,
+        imageName,
+      )) as any;
+      adminData.profileImage = generatProfileImageUrl.secure_url;
+    }
+
     const newAdmin = await Admin.create([adminData], { session });
     if (!newAdmin.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
@@ -109,7 +135,19 @@ const createAdminIntoDB = async (pass: string, adminData: TAdmin) => {
   }
 };
 
-const createFacultyIntoDB = async (pass: string, facultyData: TFaculty) => {
+const createFacultyIntoDB = async (
+  pass: string,
+  facultyData: TFaculty,
+  file: any,
+) => {
+  const isDepartmentExist = await Department.findById(
+    facultyData.academicDepartment,
+  );
+  if (!isDepartmentExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'The department is not found');
+  }
+  facultyData.academicFaculty = isDepartmentExist.academicFaculty;
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
@@ -128,6 +166,15 @@ const createFacultyIntoDB = async (pass: string, facultyData: TFaculty) => {
     }
     facultyData.user = newUser[0]?._id;
     facultyData.id = newUser[0]?.id;
+
+    if (file) {
+      const imageName = `Photo_${newUser[0].id}_${facultyData?.name.middleName}`;
+      const generatProfileImageUrl = (await sendImageToCloudinary(
+        file?.path,
+        imageName,
+      )) as any;
+      facultyData.profileImage = generatProfileImageUrl.secure_url;
+    }
 
     const newFaculty = await Faculty.create([facultyData], { session });
     if (!newFaculty.length) {

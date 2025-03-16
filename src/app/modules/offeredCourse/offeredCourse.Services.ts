@@ -34,6 +34,7 @@ const createOfferedCorseIntoDB = async (payload: TOfferedCourse) => {
 
   const isSameSectionInSameRegisterdCourseInSameCourse =
     await OfferedCourse.findOne({
+      academicDepartment,
       registeredSemester,
       course,
       section,
@@ -112,7 +113,19 @@ const updateOfferedCourseIntoDB = async (
   return result;
 };
 
+const getAllOfferedCourseFromDB = async () => {
+  const result = await OfferedCourse.find();
+  return result;
+};
+
+const getSingleOfferedCourseFromDB = async (id: string) => {
+  const result = await OfferedCourse.findById(id);
+  return result;
+};
+
 export const OfferedCourseSevieces = {
   createOfferedCorseIntoDB,
+  getAllOfferedCourseFromDB,
+  getSingleOfferedCourseFromDB,
   updateOfferedCourseIntoDB,
 };

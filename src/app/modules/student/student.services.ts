@@ -8,62 +8,6 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import { studentSearchableField } from './student.constant';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  // let searchTerm = '';
-  // if (query.searchTerm) {
-  //   searchTerm = query?.searchTerm as string;
-  // }
-
-  // const searchQuery = Student.find({
-  //   $or: searchField.map((field) => ({
-  //     [field]: { $regex: searchTerm, $options: 'i' },
-  //   })),
-  // });
-  // const queryObj = { ...query };
-  // const excludeFilterField = ['searchTerm', 'sort', 'limit','page','fields'];
-  // excludeFilterField.forEach((el) => delete queryObj[el]);
-
-  // const filterQuery = searchQuery
-  //   .find(queryObj)
-  // .populate('user')
-  // .populate('admissionSemester')
-  // .populate({
-  //   path: 'academicDepartment',
-  //   populate: {
-  //     path: 'academicFaculty',
-  //   },
-  // });
-
-  // let sort = '-createdAt';
-
-  // if (query.sort) {
-  //   sort = query?.sort as string;
-  // }
-
-  // const sortQuery = filterQuery.sort(sort);
-
-  // let limit = 5;
-  // let page = 1;
-  // let skip = 0;
-
-  // if (query.limit) {
-  //   limit = Number(query.limit) as number;
-  // }
-  // if (query.page) {
-  //   page = Number(query.page);
-  //   skip = Number((page - 1) * limit);
-  // }
-
-  // const paginationQuery = sortQuery.skip(skip);
-
-  // const limitQuery =  paginationQuery.limit(limit);
-
-  // let fields = '-__v'
-  // if(query.fields){
-  //   fields = (query.fields as string).split(',').join(' ')
-  // }
-
-  // const fieldQuery = await limitQuery.select(fields)
-  // return fieldQuery;
   const studentQuery = new QueryBuilder(
     Student.find()
       .populate('user')
@@ -87,7 +31,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findOne({ id })
+  const result = await Student.findById(id)
     .populate('user')
     .populate('admissionSemester')
     .populate({
@@ -126,6 +70,7 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   const result = await Student.findOneAndUpdate(
     { id },
     modifiedUpdateStudentData,
+    { new: true },
   );
   return result;
 };

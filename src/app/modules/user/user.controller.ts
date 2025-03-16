@@ -7,7 +7,11 @@ const createStudent = catchAsync(async (req, res) => {
   const file = req.file;
   const userPass = req.body.password;
   const studentData = req.body.student;
-  const result = await UserServices.createStudentIntoDB(userPass, studentData, file);
+  const result = await UserServices.createStudentIntoDB(
+    userPass,
+    studentData,
+    file,
+  );
   res.status(httpStatus.OK).json({
     success: true,
     message: 'Student Createtion Successfull',
@@ -18,7 +22,12 @@ const createStudent = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
   const userPass = req.body.password;
   const adminData = req.body.admin;
-  const result = await UserServices.createAdminIntoDB(userPass, adminData);
+  const file = req.file;
+  const result = await UserServices.createAdminIntoDB(
+    userPass,
+    adminData,
+    file,
+  );
   sendResponse(res, {
     message: 'Admin created successfull',
     data: result,
@@ -28,7 +37,12 @@ const createAdmin = catchAsync(async (req, res) => {
 const createFaculty = catchAsync(async (req, res) => {
   const pass = req.body.password;
   const facultyData = req.body.faculty;
-  const result = await UserServices.createFacultyIntoDB(pass, facultyData);
+  const file = req.file;
+  const result = await UserServices.createFacultyIntoDB(
+    pass,
+    facultyData,
+    file,
+  );
   sendResponse(res, {
     message: 'Faculty create successfull',
     data: result,

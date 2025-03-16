@@ -107,7 +107,7 @@ const changePassword = async (user: JwtPayload, payload: TChangePassowrd) => {
 
 const refreshToken = async (authorizationToken: string) => {
   if (!authorizationToken) {
-    throw new AppError(httpStatus.UNAUTHORIZED, 'Your are unauthorized person');
+    throw new AppError(httpStatus.UNAUTHORIZED, 'You are unauthorized person');
   }
 
   const decoded = verifyToken(

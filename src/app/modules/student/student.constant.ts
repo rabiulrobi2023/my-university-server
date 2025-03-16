@@ -1,1 +1,6 @@
-export const studentSearchableField = [ 'id'];
+export const studentSearchableField = [
+  'id',
+  'name.firstName',
+  'name.lastName',
+  'presentAddress',
+];

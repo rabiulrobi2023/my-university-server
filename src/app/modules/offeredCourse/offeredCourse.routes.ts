@@ -2,14 +2,34 @@ import { Router } from 'express';
 import { OfferedCourseValidations } from './offeredCourse.validations';
 import validationRequest from '../../middlewares/validationRequest';
 import { OfferedCourseController } from './offeredCourse.controller';
+import { userRoles } from '../user/user.constant';
+import auth from '../../middlewares/auth';
 
 const router = Router();
 router.post(
   '/create',
+  auth(userRoles.superAdmin, userRoles.admin),
   validationRequest(OfferedCourseValidations.createOfferedCourseValidtaion),
   OfferedCourseController.createOfferedCourse,
 );
 
-router.patch('/update/:id',validationRequest(OfferedCourseValidations.updateOfferedCourseValidation),OfferedCourseController.updateOfferedCourse)
+router.get(
+  '/all',
+  auth(userRoles.superAdmin, userRoles.admin),
+  OfferedCourseController.getAllOfferedCourse,
+);
+
+router.get(
+  '/:id',
+  auth(userRoles.superAdmin, userRoles.admin),
+  OfferedCourseController.getSingleOfferedCourse,
+);
+
+router.patch(
+  '/update/:id',
+  auth(userRoles.superAdmin, userRoles.admin),
+  validationRequest(OfferedCourseValidations.updateOfferedCourseValidation),
+  OfferedCourseController.updateOfferedCourse,
+);
 
 export const OfferedCourseRouter = router;

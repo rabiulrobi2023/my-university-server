@@ -2,7 +2,6 @@ import { model, Schema } from 'mongoose';
 import { TFaculty } from './faculty.interface';
 import { User } from '../user/user.model';
 import { userNameSchema } from '../../schema/userNameSchema';
-import { AcademicFaculty } from '../academicFaculty/academicFaculty.molel';
 import { Department } from '../department/department.model';
 
 const facultyMolelSchema = new Schema<TFaculty>(
@@ -59,12 +58,13 @@ const facultyMolelSchema = new Schema<TFaculty>(
     profileImage: {
       type: String,
       required: false,
+      default: '',
     },
     academicFaculty: {
       type: Schema.Types.ObjectId,
       trim: true,
       required: [true, 'Academic faculty id is required'],
-      ref: AcademicFaculty,
+      ref: 'academic-faculties',
     },
     academicDepartment: {
       type: Schema.Types.ObjectId,

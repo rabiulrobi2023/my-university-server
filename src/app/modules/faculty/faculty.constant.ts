@@ -5,5 +5,5 @@ export const facultySearchableField = [
   'name.lastName',
   'gender',
   'presentAddress',
-  'designation'
+  'designation',
 ];
