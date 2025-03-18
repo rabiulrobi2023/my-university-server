@@ -6,6 +6,8 @@ import { OfferedCourse } from './offeredCourse.model';
 import hasCoflictClassSchedule from './offeredCourse.utils';
 import { Faculty } from '../faculty/faculty.model';
 import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { Student } from '../student/student.model';
 
 const createOfferedCorseIntoDB = async (payload: TOfferedCourse) => {
   const {
@@ -113,9 +115,18 @@ const updateOfferedCourseIntoDB = async (
   return result;
 };
 
-const getAllOfferedCourseFromDB = async () => {
-  const result = await OfferedCourse.find();
-  return result;
+const getAllOfferedCourseFromDB = async (query: Record<string, unknown>) => {
+  const offeredCourseQuery = new QueryBuilder(OfferedCourse.find(), query)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const result = await offeredCourseQuery.queryModel;
+  const meta = await offeredCourseQuery.totalCount();
+  return {
+    result,
+    meta,
+  };
 };
 
 const getSingleOfferedCourseFromDB = async (id: string) => {
@@ -123,9 +134,43 @@ const getSingleOfferedCourseFromDB = async (id: string) => {
   return result;
 };
 
+const getMyOfferedCoursesFromDB = async (id: string) => {
+  const student = await Student.findOne({ id });
+  const isExistsUpcommingSemester = await SemesterRegistration.findOne({
+    status: 'Upcomming',
+  });
+  if (!isExistsUpcommingSemester) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'There is no any upcomming semester',
+    );
+  }
+console.log(id,student,isExistsUpcommingSemester)
+
+  const result = await OfferedCourse.aggregate([
+    {
+      $match: {
+        registeredSemester: isExistsUpcommingSemester?._id,
+        academicDepartment: student?.academicDepartment,
+      },
+    },
+    {
+      $lookup: {
+        from: 'courses',
+        localField: 'course',
+        foreignField: '_id',
+        as: 'course',
+      },
+    },
+  ]);
+  console.log(result)
+  return result;
+};
+
 export const OfferedCourseSevieces = {
   createOfferedCorseIntoDB,
   getAllOfferedCourseFromDB,
   getSingleOfferedCourseFromDB,
+  getMyOfferedCoursesFromDB,
   updateOfferedCourseIntoDB,
 };

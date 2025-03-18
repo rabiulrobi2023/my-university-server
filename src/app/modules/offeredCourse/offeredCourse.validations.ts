@@ -19,7 +19,7 @@ const createOfferedCourseValidtaion = z
     faculty: z.string(),
     maxCapacity: z.number(),
     section: z.number(),
-    days: z.enum(days),
+    days: z.enum(days).array(),
     startTime: timeValidationSchema,
     endTime: timeValidationSchema,
   })

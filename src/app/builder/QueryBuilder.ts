@@ -54,7 +54,7 @@ class QueryBuilder<T> {
 
   fields() {
     const fields =
-      (this?.query?.fields as string).split(',').join(' ') || '-__v';
+      (this?.query?.fields as string)?.split(',').join(' ') || '-__v';
     this.queryModel = this.queryModel.select(fields);
     return this;
   }

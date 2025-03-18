@@ -20,9 +20,15 @@ router.get(
 );
 
 router.get(
-  '/:id',
+  '/single-course/:id',
   auth(userRoles.superAdmin, userRoles.admin),
   OfferedCourseController.getSingleOfferedCourse,
+);
+
+router.get(
+  '/my-offered-courses',
+  auth(userRoles.student),
+  OfferedCourseController.getMyOfferedCourses,
 );
 
 router.patch(
