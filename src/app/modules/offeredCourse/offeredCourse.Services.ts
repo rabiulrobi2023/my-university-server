@@ -145,7 +145,6 @@ const getMyOfferedCoursesFromDB = async (id: string) => {
       'There is no any upcomming semester',
     );
   }
-console.log(id,student,isExistsUpcommingSemester)
 
   const result = await OfferedCourse.aggregate([
     {
@@ -162,8 +161,61 @@ console.log(id,student,isExistsUpcommingSemester)
         as: 'course',
       },
     },
+    {
+      $unwind: {
+        path: '$course',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'enrolled-courses',
+        let: { currentStudent: student?._id },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ['$registeredSemester', isExistsUpcommingSemester._id],
+                  },
+                  {
+                    $eq: ['$student', '$$currentStudent'],
+                  },
+                  {
+                    $eq: ['$isEnrolled', true],
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'enrolledCourses',
+      },
+    },
+
+    {
+      $addFields: {
+        isAlreadyEnrolled: {
+          $in: [
+            '$course._id',
+            {
+              $map: {
+                input: '$enrolledCourses',
+                as: 'enrolled',
+                in: '$$enrolled.course',
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      $match: {
+        isAlreadyEnrolled: false,
+      },
+    },
   ]);
-  console.log(result)
   return result;
 };
 
