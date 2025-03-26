@@ -13,13 +13,11 @@ export const sendMail = async (to: string, html: string) => {
     },
   });
 
-  console.log(to,html)
-
   await transporter.sendMail({
     from: 'protectdata100@gmail.com',
     to,
     subject: 'Reset passowrd',
     text: 'This is first web mail',
-    html
+    html,
   });
 };
