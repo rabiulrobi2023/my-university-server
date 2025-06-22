@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
-import { Student } from './student.model';
+
 import AppError from '../../error/appError';
 import httpStatus from 'http-status';
 import { User } from '../user/user.model';
-import { TStudent } from './student.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { studentSearchableField } from './student.constant';
+import { Student } from '../student/student.model';
+import { TStudent } from '../student/student.interface';
+import { studentSearchableField } from '../student/student.constant';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  
   const studentQuery = new QueryBuilder(
     Student.find()
       .populate('user')

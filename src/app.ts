@@ -21,13 +21,6 @@ app.get('/', async (req, res) => {
   res.send('My-University server is ru...');
 });
 
-// const test = (req: Request, res: Response) => {
-//   Promise.reject();
-
-//   res.send(a);
-// };
-// app.get('/test', test);
-
 app.use(globalErrorHandler);
 
 app.use(notFoundRoute);

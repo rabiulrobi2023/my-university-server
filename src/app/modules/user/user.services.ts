@@ -56,6 +56,7 @@ const createStudentIntoDB = async (
     };
 
     const newUser = await User.create([userData], { session });
+    return newUser;
 
     if (!newUser.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');

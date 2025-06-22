@@ -9,10 +9,7 @@ class QueryBuilder<T> {
   }
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm || '';
-    // if (this?.query?.searchTerm) {
-
-    // }
-
+    
     this.queryModel = this.queryModel.find({
       $or: searchableFields.map(
         (field) =>
@@ -53,8 +50,7 @@ class QueryBuilder<T> {
   }
 
   fields() {
-    const fields =
-      (this?.query?.fields as string)?.split(',').join(' ') || '-__v';
+    const fields = (this?.query?.fields as string)?.split(',').join(' ') || '-__v';
     this.queryModel = this.queryModel.select(fields);
     return this;
   }

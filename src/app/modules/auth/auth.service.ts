@@ -9,27 +9,6 @@ import { createToken, verifyToken } from './auth.utils';
 import { sendMail } from '../../utils/sentMail';
 
 const loginUser = async (payload: TLoginUser) => {
-  // const isUserExist = await User.findOne({ id: payload?.id });
-
-  // if (!isUserExist) {
-  //   throw new AppError(httpStatus.NOT_FOUND, 'Account not found');
-  // }
-
-  // if (isUserExist?.isDeleted) {
-  //   throw new AppError(httpStatus.FORBIDDEN, 'The account is deleted');
-  // }
-
-  // if (isUserExist?.staus === 'block') {
-  //   throw new AppError(httpStatus.FORBIDDEN, 'The account is blocked');
-  // }
-
-  // const checkPassowrd = await bcrypt.compare(
-  //   payload?.password,
-  //   isUserExist?.password,
-  // );
-  // if (!checkPassowrd) {
-  //   throw new AppError(httpStatus.BAD_REQUEST, 'Wrong password');
-  // }
   const isExistUser = await User.isUserExistByCustomId(payload.id);
   if (!isExistUser) {
     throw new AppError(httpStatus.NOT_FOUND, 'Account not found');

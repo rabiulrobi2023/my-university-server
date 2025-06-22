@@ -5,7 +5,7 @@ import { environment } from '../constants/environment.constant';
 export const sendMail = async (to: string, html: string) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
+    port: config.NODE_ENV === environment.pro ? 465 : 587,
     secure: config.NODE_ENV === environment.pro,
     auth: {
       user: 'protectdata100@gmail.com',
